@@ -14,11 +14,16 @@ public class Train {
     }
 
     public boolean ready() {
-        if (cars.peek().type.equals("ENG")) {
-            return true;
-        } else {
+        try {
+            if (cars.peek().type.equals("ENG")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
             return false;
         }
+        
     }
 
     public boolean canAdd(Car newCar) {
@@ -30,13 +35,15 @@ public class Train {
         weight += newCar.weight;
     }
 
+    public void addEngine(String destination) {
+        cars.push(new Car("ENG00000", destination));
+    }
+
     public void depart() {
-        Car engine = cars.pop();
-        System.out.println(engine.name + " leaving for " + engine.destination + " with the following cars: ");
         while (!cars.empty()) {
-            Car cur = cars.pop();
-            System.out.println(cur.name + " containing " + cur.contents);
+            System.out.println(cars.pop());
         }
+        System.out.println();
         cars.clear();
         weight = 0;
     }

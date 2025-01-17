@@ -42,7 +42,6 @@ public class MyProgram {
 
 		// START PROCESSING CARS
 		Queue<Car> cars = new LinkedList<Car>();
-		Queue<Car> track1 = new LinkedList<Car>();
 		trainA = new Train("Trenton", limitTrackA);
 		trainB = new Train("Charlotte", limitTrackB);
 		trainC = new Train("Baltimore", limitTrackC);
@@ -50,6 +49,7 @@ public class MyProgram {
 		
 		while (!rawInput.isEmpty()) {
 			String name = rawInput.remove();
+			//System.out.println(name);
 			if (name.substring(0, 3).equals("CAR")) {
 				cars.add(
 					new Car(
@@ -70,74 +70,63 @@ public class MyProgram {
 				);
 			}
 		}
-
+		// while(!cars.isEmpty()) {
+		// 	System.out.println(cars.remove());
+		// }
+		Car nextCar = cars.remove();
 		while (!cars.isEmpty()) {
-			Car nextCar = cars.remove();
-
-			if (nextCar.weight > 700) {
-				track1.add(nextCar);
+			if (nextCar.miles > 700) {
+				nextCar.resetMiles();
+				cars.add(nextCar);
 				nextCar = cars.remove();
+				continue;
 			}
-			
-			departures();
-
+			if (nextCar.name.substring(3).equals("00024"))
+				System.out.println(nextCar.destination);
 			switch (nextCar.destination){
 				case "Trenton":
 					if (trainA.canAdd(nextCar)) {
 						trainA.addCar(nextCar);
 						nextCar = cars.remove();
+					} else {
+						trainA.addEngine(nextCar.destination);
 					}
 					break;
 				case "Charlotte":
 					if (trainB.canAdd(nextCar)) {
 						trainB.addCar(nextCar);
 						nextCar = cars.remove();
+					} else {
+						trainB.addEngine(nextCar.destination);
 					}
 					break;
 				case "Baltimore":
 					if (trainC.canAdd(nextCar)) {
 						trainC.addCar(nextCar);
 						nextCar = cars.remove();
+					} else {
+						trainC.addEngine(nextCar.destination);
 					}
 					break;
 				default:
 					trainD.addCar(nextCar);
 					nextCar = cars.remove();
 			}
-
-			
-		}
-		while (!track1.isEmpty()) {
-			Car nextCar = track1.remove();	
 			departures();
 
-			switch (nextCar.destination){
-				case "Trenton":
-					if (trainA.canAdd(nextCar)) {
-						trainA.addCar(nextCar);
-						nextCar = cars.remove();
-					}
-					break;
-				case "Charlotte":
-					if (trainB.canAdd(nextCar)) {
-						trainB.addCar(nextCar);
-						nextCar = cars.remove();
-					}
-					break;
-				case "Baltimore":
-					if (trainC.canAdd(nextCar)) {
-						trainC.addCar(nextCar);
-						nextCar = cars.remove();
-					}
-					break;
-				default:
-					trainD.addCar(nextCar);
-					nextCar = cars.remove();
-			}
-
-			
 		}
 
+		//final departures
+		trainA.addEngine("Trenton");
+		trainB.addEngine("Charlotte");
+		trainC.addEngine("Baltimore");
+		trainA.depart();
+		trainB.depart();
+		trainC.depart();
+		
+		System.out.println("Track D Cars: ");
+		trainD.depart();
+		
 		
 
 
@@ -154,10 +143,6 @@ public class MyProgram {
 
 		if (trainC.ready()) {
 			trainC.depart();
-		}
-
-		if (trainD.ready()) {
-			trainD.depart();
 		}
 	}
 }

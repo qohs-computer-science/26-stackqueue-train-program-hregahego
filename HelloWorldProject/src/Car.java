@@ -19,8 +19,15 @@ public class Car {
         this.destination = destination;
     }
 
+    public void resetMiles() {
+        miles = 100;
+    }
+
     public String toString() {
-        return name + " " + contents + " " + destination + " " + weight + " " + miles;
+        if (type.equals("ENG"))
+            return name + " leaving for " + destination + " with the following cars: ";
+        else 
+            return name + " containing " + contents;
     }
 
 }
