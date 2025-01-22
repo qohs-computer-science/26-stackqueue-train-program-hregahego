@@ -24,20 +24,20 @@ public class Train {
             return false;
         }
         
-    }
+    } //check if train ready to depart - if top of stack is an engine
 
     public boolean canAdd(Car newCar) {
         return limit < 0 || weight + newCar.weight <= limit;
-    }
+    } //check if next car can be added
 
     public void addCar(Car newCar) {    
         cars.push(newCar);
         weight += newCar.weight;
-    }
+    } //add car
 
     public void addEngine(String destination) {
         cars.push(new Car("ENG00000", destination));
-    }
+    } //add default engine
 
     public void depart() {
         while (!cars.empty()) {
@@ -46,8 +46,8 @@ public class Train {
         System.out.println();
         cars.clear();
         weight = 0;
-    }
+    } //print out contents of train, clear train and weight
 
 
 
-}
+} //end train

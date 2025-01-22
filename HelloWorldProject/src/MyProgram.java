@@ -2,14 +2,13 @@
  * TODO: Steven Wang
  * TODO: 1/10/25
  * TODO: 3
- * TODO: hee hee hee haw
+ * TODO: Train program
  */
 import java.util.Scanner;
 import java.io.File;
-import java.util.Stack;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Iterator;
+
 
 public class MyProgram {
 	public static int val = 0;
@@ -69,25 +68,25 @@ public class MyProgram {
 					)
 				);
 			}
-		}
-		// while(!cars.isEmpty()) {
-		// 	System.out.println(cars.remove());
-		// }
+		} //get raw string input from file
+
+
+		
+
 		Car nextCar = cars.remove();
-		while (!cars.isEmpty()) {
+		while (nextCar != null) {
+			
 			if (nextCar.miles > 700) {
 				nextCar.resetMiles();
 				cars.add(nextCar);
-				nextCar = cars.remove();
-				continue;
+				nextCar = getNext(cars);
 			}
-			if (nextCar.name.substring(3).equals("00024"))
-				System.out.println(nextCar.destination);
+			
 			switch (nextCar.destination){
 				case "Trenton":
 					if (trainA.canAdd(nextCar)) {
 						trainA.addCar(nextCar);
-						nextCar = cars.remove();
+						nextCar = getNext(cars);
 					} else {
 						trainA.addEngine(nextCar.destination);
 					}
@@ -95,7 +94,7 @@ public class MyProgram {
 				case "Charlotte":
 					if (trainB.canAdd(nextCar)) {
 						trainB.addCar(nextCar);
-						nextCar = cars.remove();
+						nextCar = getNext(cars);
 					} else {
 						trainB.addEngine(nextCar.destination);
 					}
@@ -103,18 +102,19 @@ public class MyProgram {
 				case "Baltimore":
 					if (trainC.canAdd(nextCar)) {
 						trainC.addCar(nextCar);
-						nextCar = cars.remove();
+						nextCar = getNext(cars);
 					} else {
 						trainC.addEngine(nextCar.destination);
 					}
 					break;
 				default:
 					trainD.addCar(nextCar);
-					nextCar = cars.remove();
-			}
+					//System.out.println(":::::" + nextCar.name);
+					nextCar = getNext(cars);
+					break;
+			} //handle adding cars to trains
 			departures();
-
-		}
+		} //process all trains
 
 		//final departures
 		trainA.addEngine("Trenton");
@@ -127,10 +127,7 @@ public class MyProgram {
 		System.out.println("Track D Cars: ");
 		trainD.depart();
 		
-		
-
-
-	}
+	}//end main
 
 	public static void departures() {
 		if (trainA.ready()) {
@@ -144,5 +141,14 @@ public class MyProgram {
 		if (trainC.ready()) {
 			trainC.depart();
 		}
-	}
-}
+	} //handle departures
+
+	public static Car getNext(Queue<Car> cars) {
+		try {
+			return cars.remove();
+
+		} catch (Exception e) {
+			return null;
+		}
+	} //return next car from queue
+} //end program
